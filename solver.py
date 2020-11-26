@@ -57,8 +57,15 @@ def programacion_dinamica():
 #
 def obtener_parametros():
     global texto_ayuda
+    if (len(sys.argv) == 1):
+        print("Error: Hacen falta parametros!\n Utilice el parametro -h para mostrar mas informacion")
+        sys.exit(-1)
     if (sys.argv[1] == "-h"):
         print(texto_ayuda)
+    if (len(sys.argv) < 4):
+        print("Error: Hacen falta parametros!\n Utilice el parametro -h para mostrar mas informacion")
+        sys.exit(-1)
+    
 
 def main():
     obtener_parametros()
