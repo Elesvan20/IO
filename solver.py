@@ -7,7 +7,17 @@
 '''
 import sys
 
-texto_ayuda = "========================Inicio de Mensaje de Ayuda========================\n" \
+#Variables globales
+problema = 0
+algoritmo = 0
+
+#Codigos posibles errores
+POCOSPARAMETROS = -1
+MUCHOSPARAMETROS = -2
+ARCHIVONOENCONTRADO = -3
+
+#Strings constantes
+texto_ayuda = "\n========================Inicio de Mensaje de Ayuda========================\n" \
               "Comando para ejecutar el proyecto: \n " \
          "python3 solver.py [-h] PROBLEMA ALGORITMO ARCHIVO\n" \
          "Donde el parametro -h es opcional y PROBLEMA ALGORITMO ARCHIVO son obligatorios\n" \
@@ -41,6 +51,10 @@ texto_ayuda = "========================Inicio de Mensaje de Ayuda===============
           "NOTA: Siempre se ejecuta el metodo de scoring +1,-1,-2; Ademas, solo se utilizaran las letras A T C G\n" \
               "========================Fin de Mensaje de Ayuda========================\n"
 
+error_archivo = "\nERROR: Parece que el archivo indicado no existe dentro de mi carpeta de ejecucion!!\n"
+error_pocos_parametros = "\nError: Hacen falta parametros!\n Utilice el parametro -h para mostrar mas informacion\n"
+error_muchos_parametros = "\nError: Se recibieron muchos parametros\n Utilice el parametro -h para mostrar mas informacion\n"
+sintaxis_uso = "\nSintaxis: python3 solver.py [-h] PROBLEMA(1/2) ALGORITMO(1/2) ARCHIVO(nombre.txt)\n"
 
 
 def fuerza_bruta():
@@ -50,26 +64,123 @@ def fuerza_bruta():
 def programacion_dinamica():
     print("progra dinamica")
 
+'''
+CASO MOCHILA
+    si -h es indicado, usar:
+    PROBLEMA = sys.argv[2]
+    ALGORITMO = sys.argv[3]
+    ARCHIVO = sys.argv[4]
 
-#
-#    Obtiene los parametros del archivo indicado, en caso de recibir un archivo de entrada
-#
-#
+    si -h NO es indicado, usar
+    PROBLEMA = sys.argv[1]
+    ALGORITMO = sys.argv[2]
+    ARCHIVO = sys.argv[3]
+'''
+def obtener_datos_mochila(despliegaH):
+
+    if (despliegaH):
+        # recupera los datos del archivo
+        try:
+            archivo = open(sys.argv[4])
+            datos = archivo.read().strip()
+            archivo.close()
+        except FileNotFoundError:
+            print(error_archivo)
+            sys.exit(ARCHIVONOENCONTRADO)
+        # elementos[0] seria el peso maximo del contenedor
+        # los siguientes elementos serian los articulos
+        elementos = []
+        for line in datos.split('\n'):  # obtiene los datos del archivo
+            elementos.append(line.split(","))
+        return (elementos)
+    else:
+        try:
+            # recupera los datos del archivo
+            archivo = open(sys.argv[3])
+            datos = archivo.read().strip()
+            archivo.close()
+        except FileNotFoundError:
+            print(error_archivo)
+            sys.exit(ARCHIVONOENCONTRADO)
+
+        # elementos[0] seria el peso maximo del contenedor
+        # los siguientes elementos serian los articulos
+        elementos = []
+        for line in datos.split('\n'):  # obtiene los datos del archivo
+            elementos.append(line.split(","))
+        return (elementos)
+
+#    TODO
+def obtener_datos_alineamiento(despliegaH):
+    return "recuperar datos para ejercicio alineamiento"
+
+
+'''
+    Define la logica para
+    obtener los parametros del archivo indicado    
+'''
 def obtener_parametros():
     global texto_ayuda
+    global problema
+    global algoritmo
+
+    '''
+        Casos especiales de entrada
+    '''
     if (len(sys.argv) == 1):
         print("Error: Hacen falta parametros!\n Utilice el parametro -h para mostrar mas informacion")
-        sys.exit(-1)
+        sys.exit(POCOSPARAMETROS)
+
     if (sys.argv[1] == "-h"):
         print(texto_ayuda)
+
+        #casos especial de error
+        if (len(sys.argv) < 5):
+            print(sintaxis_uso)
+            sys.exit(POCOSPARAMETROS)
+
+        if (len(sys.argv) > 5):
+            print(sintaxis_uso)
+            sys.exit(MUCHOSPARAMETROS)
+
+        #guardar globalmente el algoritmo a utilizar
+        algoritmo = sys.argv[3]
+
+        #condicional para recuperacion de datos
+        if (sys.argv[2] == '1'):
+            problema = 1    #indica que es problema de mochila
+            return (obtener_datos_mochila(True))
+        else:
+            problema = 2    #indica que es problema de alineamiento
+            return (obtener_datos_alineamiento(True))
+
+    # casos especial de error
     if (len(sys.argv) < 4):
-        print("Error: Hacen falta parametros!\n Utilice el parametro -h para mostrar mas informacion")
-        sys.exit(-1)
-    
+        print(error_pocos_parametros)
+        sys.exit(POCOSPARAMETROS)
+    if (len(sys.argv) > 4 and sys.argv[1] != "-h"):
+        print(error_muchos_parametros)
+        sys.exit(MUCHOSPARAMETROS)
+
+    # Procesamiento directo una vez superado los casos especiales y sin usar -h
+
+    # Guardar globalmente el algoritmo a utilizar
+    algoritmo = sys.argv[2]
+
+    # condicional para recuperacion de datos
+    if (sys.argv[1] == '1'):
+        problema = 1  # indica que es problema de mochila
+        return (obtener_datos_mochila(False))
+    else:
+        problema = 2  # indica que es problema de alineamiento
+        return (obtener_datos_alineamiento(False))
 
 def main():
-    obtener_parametros()
-
+    datos = obtener_parametros()
+    print("Ejecutando problema "+str(problema))
+    print("Usando algoritmo: "+str(algoritmo))
+    print("datos obtenidos: \n")
+    print(datos)
 
 
 main()
