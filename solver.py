@@ -10,11 +10,11 @@ import sys
 texto_ayuda = "========================Inicio de Mensaje de Ayuda========================\n" \
               "Comando para ejecutar el proyecto: \n " \
          "python3 solver.py [-h] PROBLEMA ALGORITMO ARCHIVO\n" \
-         "Donde el parametro -h y PROBLEMA ALGORITMO ARCHIVO son obligatorios\n" \
+         "Donde el parametro -h es opcional y PROBLEMA ALGORITMO ARCHIVO son obligatorios\n" \
          "Si -h es indicado, se muestra este mensaje junto a las instrucciones para ejecutar archivos\n" \
          "PROBLEMA es un valor de 1 o 2 indicando a resolver: el ejercicio 1 (contenedor) - ejercicio 2 (alineamiento) \n" \
          "ALGORITMO es un valor de 1 o 2 indicando el algoritmo a usar: 1 fuerza bruta - 2 programacion dinamica\n" \
-         "ARCHIVO indica el archivo de entrada donde el programa toma los parametros del problema y procede a resolverlo con las configuraciones previas" \
+         "ARCHIVO indica el archivo de entrada donde el programa toma los parametros del problema y procede a resolverlo con las configuraciones previas\n" \
          "Nota: Si no se indica un archivo, se ejecuta el problema predefinido en el sistema\n" \
          "=================================================================================\n" \
          "Tambien cuenta con un modulo generador de experimentos, cada experimento es una ejecucion configurable\n" \
@@ -38,7 +38,7 @@ texto_ayuda = "========================Inicio de Mensaje de Ayuda===============
           "Donde:\n" \
               "largoH1 es el largo de la hilera1\n" \
               "largoH2 es el largo de la hilera2\n" \
-          "NOTA: Siempre se ejecuta el metodo de scoring +1,-1,-2; Ademas, solo se utilizaran las letras A T C G" \
+          "NOTA: Siempre se ejecuta el metodo de scoring +1,-1,-2; Ademas, solo se utilizaran las letras A T C G\n" \
               "========================Fin de Mensaje de Ayuda========================\n"
 
 
@@ -62,7 +62,8 @@ def obtener_parametros():
 
 def main():
     obtener_parametros()
-    print("Hello World")
+
+
 
 main()
 '''
