@@ -6,6 +6,7 @@
     II Semestre 2020
 '''
 import sys
+import time
 
 #Variables globales
 problema = 0
@@ -15,6 +16,8 @@ algoritmo = 0
 POCOSPARAMETROS = -1
 MUCHOSPARAMETROS = -2
 ARCHIVONOENCONTRADO = -3
+PROBLEMAINVALIDO = -4
+ALGORITMOINVALIDO = -5
 
 #Strings constantes
 texto_ayuda = "\n========================Inicio de Mensaje de Ayuda========================\n" \
@@ -89,14 +92,10 @@ def fuerza_bruta(datos):
 
     #separar los items que nos dan
     for i in range(1,len(datos)):
-        print(datos[i])
         #posicion 2 es la cantidad de items
         for j in range(int(datos[i][2])):
             pesos.append(int(datos[i][0]))
             valores.append(int(datos[i][1]))
-    print("Mochila ",(mochila))
-    print("arreglo de beneficio: ",valores)
-    print("arreglo de pesos: ", pesos)
 
     return fuerza_bruta_auxiliar(mochila, valores, pesos, len(valores))
 
@@ -140,7 +139,6 @@ def programacion_dinamica(datos):
 
     #separar los items que nos dan
     for i in range(1,len(datos)):
-        print(datos[i])
         #posicion 2 es la cantidad de items
         for j in range(int(datos[i][2])):
             pesos.append(int(datos[i][0]))
@@ -161,7 +159,7 @@ CASO MOCHILA
     ARCHIVO = sys.argv[3]   (STRING)
 '''
 def obtener_datos_mochila(despliegaH):
-
+    lineas = []
     if (despliegaH):
         # recupera los datos del archivo
         try:
@@ -171,12 +169,11 @@ def obtener_datos_mochila(despliegaH):
         except FileNotFoundError:
             print(error_archivo)
             sys.exit(ARCHIVONOENCONTRADO)
-        # elementos[0] seria el peso maximo del contenedor
+
         # los siguientes elementos serian los articulos
-        elementos = []
         for line in datos.split('\n'):  # obtiene los datos del archivo
-            elementos.append(line.split(","))
-        return (elementos)
+            lineas.append(line.split(","))
+        return (lineas)
     else:
         try:
             # recupera los datos del archivo
@@ -187,17 +184,49 @@ def obtener_datos_mochila(despliegaH):
             print(error_archivo)
             sys.exit(ARCHIVONOENCONTRADO)
 
-        # elementos[0] seria el peso maximo del contenedor
         # los siguientes elementos serian los articulos
-        elementos = []
         for line in datos.split('\n'):  # obtiene los datos del archivo
-            elementos.append(line.split(","))
-        return (elementos)
+            lineas.append(line.split(","))
+        return (lineas)
 
-#    TODO
+'''
+    Funcion encarga de obtener los datos del archivo de texto
+    y retornarlos en un arreglo para su posterior uso
+'''
 def obtener_datos_alineamiento(despliegaH):
-    return "recuperar datos para ejercicio alineamiento"
+    lineas = []
+    # Caso donde se despliega ayuda
+    if (despliegaH):
+        # recupera los datos del archivo
+        try:
+            archivo = open(sys.argv[4])
+            datos = archivo.read().strip()
+            archivo.close()
+        except FileNotFoundError:
+            print(error_archivo)
+            sys.exit(ARCHIVONOENCONTRADO)
 
+        # los siguientes elementos serian los articulos
+        for line in datos.split('\n'):  # obtiene los datos del archivo
+            lineas.append(line.split(","))
+        return (lineas)
+
+    # Caso no se despliega ayuda
+    else:
+        try:
+            # recupera los datos del archivo
+            archivo = open(sys.argv[3])
+            datos = archivo.read().strip()
+            archivo.close()
+        except FileNotFoundError:
+            print(error_archivo)
+            sys.exit(ARCHIVONOENCONTRADO)
+
+        # los siguientes elementos serian los articulos
+
+        for line in datos.split('\n'):  # obtiene los datos del archivo
+            lineas.append(line.split(","))
+        return (lineas)
 
 '''
     Define la logica para
@@ -228,15 +257,19 @@ def obtener_parametros():
             sys.exit(MUCHOSPARAMETROS)
 
         #guardar globalmente el algoritmo a utilizar
-        algoritmo = sys.argv[3]
+        algoritmo = int(sys.argv[3])
 
         #condicional para recuperacion de datos
-        if (sys.argv[2] == '1'):
+        if (sys.argv[2] == "1"):
             problema = 1    #indica que es problema de mochila
             return (obtener_datos_mochila(True))
-        else:
+        elif sys.argv[2] == "2":
             problema = 2    #indica que es problema de alineamiento
             return (obtener_datos_alineamiento(True))
+        else:
+            print("Error: No se ha seleccionado un problema valido a ejecutar (1-2)\n"
+                  "valor recibido: " + str(sys.argv[2]))
+            sys.exit(PROBLEMAINVALIDO)
 
     # casos especial de error
     if (len(sys.argv) < 4):
@@ -249,40 +282,63 @@ def obtener_parametros():
     # Procesamiento directo una vez superado los casos especiales y sin usar -h
 
     # Guardar globalmente el algoritmo a utilizar
-    algoritmo = sys.argv[2]
+    algoritmo = int(sys.argv[2])
 
     # condicional para recuperacion de datos
-    if (sys.argv[1] == '1'):
+    if (sys.argv[1] == "1"):
         problema = 1  # indica que es problema de mochila
         return (obtener_datos_mochila(False))
-    else:
+    elif sys.argv[1] == "2":
         problema = 2  # indica que es problema de alineamiento
         return (obtener_datos_alineamiento(False))
+    else:
+        print("Error: No se ha seleccionado un problema valido a ejecutar (1-2)\n"
+              "valor recibido: " + str(sys.argv[1]))
+        sys.exit(PROBLEMAINVALIDO)
+
 
 def main():
+    global problema, algoritmo
     datos = obtener_parametros()
     print("Ejecutando problema "+str(problema))
     print("Usando algoritmo: "+str(algoritmo))
-    print("datos obtenidos: \n")
-    print(datos)
+    print("datos obtenidos: ", datos)
+
 
     if (problema == 1): #Caso Mochila
-        print("Valor algoritmo "+str(algoritmo))
 
         # Caso fuerza bruta
-        if (algoritmo == '1'):
-            fuerza_bruta(datos)
+        if (algoritmo == 1):
+            print("Ejecutando Fuerza Bruta para Mochila")
+            print("Resultado: ", fuerza_bruta(datos))
 
         # Caso programacion dinamica
-        else:
-            programacion_dinamica(datos)
+        elif (algoritmo == 2):
+            print("Ejecutando Programacion Dinamica para Mochila")
+            print("Resultado: ", programacion_dinamica(datos))
 
-    else:
+        # Contencion algoritmo invalido
+        else:
+            print("Se ha recibido una opcion de algoritmo invalida (1-2)\n"
+                  "Algoritmo recibido: ", str(algoritmo))
+            sys.exit(ALGORITMOINVALIDO)
+
+    elif (problema == 2):
         print("Caso alineamiento")
 
+    else:
+        print("Error: No se ha seleccionado un problema valido a ejecutar (1-2)\n"
+              "valor recibido: " + str(problema))
+        sys.exit(PROBLEMAINVALIDO)
 
 
+
+
+#cronometro para calcular la ejecucion del proyecto
+tiempo_inicio = time.time()
 main()
+print("¡Programa Finalizado!\nSegundos transcurridos",(time.time() - tiempo_inicio))
+
 '''
     Sintaxis
     python3 solver.py [-h] PROBLEMA ALGORITMO ARCHIVO
