@@ -22,6 +22,8 @@
 #
 
 import sys
+import random
+#from solver import mochila_fuerza_bruta
 
 #Variables globales
 problema = 0
@@ -40,7 +42,39 @@ ERROR_ARCHIVO = "\nERROR: Parece que el archivo indicado no existe dentro de mi 
 SINTAXIS_USO = "\nSintaxis: python3 generator.py PROBLEMA(1/2) ARCHIVO(nombre.txt) PARAMETROS (una sola instruccion, usar comillas)\n"
 
 def problema1_mochila():
-    print("Resuelvo el problema de la mochila")
+
+    #verificamos que hayan suficientes parametros antes de continuar
+    if (len(parametros) != 8):
+        print("Error! Se recibieron parametros incompletos para crear la configuracion de la mochila\n"
+              "Parametros recibidos: ")
+        print(parametros)
+        print("Cantidad de parametros: "+str(len(parametros)))
+        sys.exit(POCOSPARAMETROS)
+
+    #Conversion de los parametros a formato necesario
+    peso = [int(parametros[0])]
+    elementos = int(parametros[1])
+    minPeso = int(parametros[2])
+    maxPeso = int(parametros[3])
+    minBeneficio = int(parametros[4])
+    maxBeneficio = int(parametros[5])
+    minCantidad = int(parametros[6])
+    maxCantidad = int(parametros[7])
+
+    configs = []
+    for i in range(elementos):
+        nuevo_articulo = str(random.randint(minPeso, maxPeso))+" "+str(random.randint(minBeneficio, maxBeneficio))+" "+str(random.randint(minCantidad, maxCantidad))
+        nuevo_articulo = nuevo_articulo.split(" ")
+        print(nuevo_articulo)
+        configs.append(nuevo_articulo)
+
+    configs.insert(0, peso)
+    print("Configuraciones finales: ")
+    print(configs)
+
+    '''import solver as sv
+    sv.solver = False
+    print(sv.mochila_fuerza_bruta(configs))'''
 
 
 #
@@ -68,7 +102,7 @@ def problema2_alineamiento():
     desde la consola a las variables para 
     configurar los ejercicios
 '''
-def obtener_parametros():
+def generador_obtener_parametros():
     global problema, parametros, nombre_archivo
     '''
         Casos especiales de entrada
@@ -99,11 +133,16 @@ def obtener_parametros():
 
 def main():
     #invocamos la obtencion de los datos
-    obtener_parametros()
+    generador_obtener_parametros()
     print("Usando algoritmo: " + str(problema))
     print("Nombre deseado para el archivo " + str(nombre_archivo))
     print("Parametros obtenidos: ", parametros)
 
+    if (problema == 1):
+        problema1_mochila()
+
+    else:
+        problema2_alineamiento()
 
 main()
 '''
