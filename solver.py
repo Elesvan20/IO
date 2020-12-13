@@ -53,11 +53,13 @@ texto_ayuda = "\n========================Inicio de Mensaje de Ayuda=============
               "largoH2 es el largo de la hilera2\n" \
           "NOTA: Siempre se ejecuta el metodo de scoring +1,-1,-2; Ademas, solo se utilizaran las letras A T C G\n" \
               "========================Fin de Mensaje de Ayuda========================\n"
-error_archivo = "\nERROR: Parece que el archivo indicado no existe dentro de mi carpeta de ejecucion!!\n"
-error_pocos_parametros = "\nError: Hacen falta parametros!\n Utilice el parametro -h para mostrar mas informacion\n"
-error_muchos_parametros = "\nError: Se recibieron muchos parametros\n Utilice el parametro -h para mostrar mas informacion\n"
-sintaxis_uso = "\nSintaxis: python3 solver.py [-h] PROBLEMA(1/2) ALGORITMO(1/2) ARCHIVO(nombre.txt)\n"
+ERROR_ARCHIVO = "\nERROR: Parece que el archivo indicado no existe dentro de mi carpeta de ejecucion!!\n"
+ERROR_POCOS_PARAMETROS = "\nError: Hacen falta parametros!\n Utilice el parametro -h para mostrar mas informacion\n"
+ERROR_MUCHOS_PARAMETROS = "\nError: Se recibieron muchos parametros\n Utilice el parametro -h para mostrar mas informacion\n"
+SINTAXIS_USO = "\nSintaxis: python3 solver.py [-h] PROBLEMA(1/2) ALGORITMO(1/2) ARCHIVO(nombre.txt)\n"
 
+
+#Pequeña funcion auxiliar para imprimir matrices de manera "ordenada"
 def imprimirMatriz(matriz):
     for i in range(len(matriz)):
         print(matriz[i])
@@ -171,7 +173,7 @@ def obtener_datos_mochila(despliegaH):
             datos = archivo.read().strip()
             archivo.close()
         except FileNotFoundError:
-            print(error_archivo)
+            print(ERROR_ARCHIVO+archivo)
             sys.exit(ARCHIVONOENCONTRADO)
 
         # los siguientes elementos serian los articulos
@@ -185,7 +187,7 @@ def obtener_datos_mochila(despliegaH):
             datos = archivo.read().strip()
             archivo.close()
         except FileNotFoundError:
-            print(error_archivo)
+            print(ERROR_ARCHIVO+archivo)
             sys.exit(ARCHIVONOENCONTRADO)
 
         # los siguientes elementos serian los articulos
@@ -207,7 +209,7 @@ def obtener_datos_alineamiento(despliegaH):
             datos = archivo.read().strip()
             archivo.close()
         except FileNotFoundError:
-            print(error_archivo)
+            print(ERROR_ARCHIVO+archivo)
             sys.exit(ARCHIVONOENCONTRADO)
 
         # los siguientes elementos serian los articulos
@@ -223,11 +225,10 @@ def obtener_datos_alineamiento(despliegaH):
             datos = archivo.read().strip()
             archivo.close()
         except FileNotFoundError:
-            print(error_archivo)
+            print(ERROR_ARCHIVO+archivo)
             sys.exit(ARCHIVONOENCONTRADO)
 
-        # los siguientes elementos serian los articulos
-
+        # los siguientes elementos serian las hileras
         for line in datos.split('\n'):  # obtiene los datos del archivo
             lineas.append(line.split(","))
         return (lineas)
@@ -253,11 +254,11 @@ def obtener_parametros():
 
         #casos especial de error
         if (len(sys.argv) < 5):
-            print(sintaxis_uso)
+            print(SINTAXIS_USO)
             sys.exit(POCOSPARAMETROS)
 
         if (len(sys.argv) > 5):
-            print(sintaxis_uso)
+            print(SINTAXIS_USO)
             sys.exit(MUCHOSPARAMETROS)
 
         #guardar globalmente el algoritmo a utilizar
@@ -277,10 +278,10 @@ def obtener_parametros():
 
     # casos especial de error
     if (len(sys.argv) < 4):
-        print(error_pocos_parametros)
+        print(ERROR_POCOS_PARAMETROS)
         sys.exit(POCOSPARAMETROS)
     if (len(sys.argv) > 4 and sys.argv[1] != "-h"):
-        print(error_muchos_parametros)
+        print(ERROR_MUCHOS_PARAMETROS)
         sys.exit(MUCHOSPARAMETROS)
 
     # Procesamiento directo una vez superado los casos especiales y sin usar -h
