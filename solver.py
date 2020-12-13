@@ -66,23 +66,23 @@ def imprimirMatriz(matriz):
 
 
 #Funcion recursiva para realizar el recorrido de mochila
-def fuerza_bruta_auxiliar(mochila,valores,pesos,elementos):
+def mochila_fuerza_bruta_auxiliar(mochila, valores, pesos, elementos):
     #Caso cuando no hay mas espacio en la mochila o bien, se acaban los elementos
     if (elementos == 0 or mochila == 0):
         return 0
 
     #Caso donde no tenemos espacio para este elemento
     if (pesos[elementos-1] > mochila):
-        return fuerza_bruta_auxiliar(mochila, valores, pesos, elementos-1)
+        return mochila_fuerza_bruta_auxiliar(mochila, valores, pesos, elementos - 1)
 
     #llamada recursiva sobre la lista
     else:
         return max(
                     #Caso agrego elemento a la mochila
-                    valores[elementos-1] + fuerza_bruta_auxiliar(mochila-pesos[elementos-1],valores,pesos,elementos-1),
+            valores[elementos-1] + mochila_fuerza_bruta_auxiliar(mochila - pesos[elementos - 1], valores, pesos, elementos - 1),
 
                     #Caso no agrego elemento a la mochila
-                    fuerza_bruta_auxiliar(mochila,valores,pesos,elementos-1)
+                    mochila_fuerza_bruta_auxiliar(mochila, valores, pesos, elementos - 1)
                 )
 
 '''
@@ -90,7 +90,7 @@ def fuerza_bruta_auxiliar(mochila,valores,pesos,elementos):
     para realizar la corrida de mochila
     siguiendo el algoritmo de fuerza bruta
 '''
-def fuerza_bruta(datos):
+def mochila_fuerza_bruta(datos):
     print("Fuerza Bruta")
     mochila = int(datos[0][0])
     valores = []
@@ -103,10 +103,10 @@ def fuerza_bruta(datos):
             pesos.append(int(datos[i][0]))
             valores.append(int(datos[i][1]))
 
-    return fuerza_bruta_auxiliar(mochila, valores, pesos, len(valores))
+    return mochila_fuerza_bruta_auxiliar(mochila, valores, pesos, len(valores))
 
 #Funcion auxiliar para el recorrido dinamico de la mochila
-def programacion_dinamica_auxiliar(mochila,valores,pesos,elementos):
+def mochila_programacion_dinamica_auxiliar(mochila, valores, pesos, elementos):
 
     #creamos la matriz a utilizar para el algoritmo
     matriz = [[0 for x in range(mochila + 1)] for x in range(elementos + 1)]
@@ -138,7 +138,7 @@ def programacion_dinamica_auxiliar(mochila,valores,pesos,elementos):
     para realizar la corrida de mochila
     siguiendo el algoritmo de programacion dinamica
 '''
-def programacion_dinamica(datos):
+def mochila_programacion_dinamica(datos):
     mochila = int(datos[0][0])
     valores = []
     pesos = []
@@ -150,7 +150,7 @@ def programacion_dinamica(datos):
             pesos.append(int(datos[i][0]))
             valores.append(int(datos[i][1]))
 
-    return programacion_dinamica_auxiliar(mochila, valores, pesos, len(pesos))
+    return mochila_programacion_dinamica_auxiliar(mochila, valores, pesos, len(pesos))
 
 '''
 CASO MOCHILA
@@ -315,12 +315,12 @@ def main():
         # Caso fuerza bruta
         if (algoritmo == 1):
             print("Ejecutando Fuerza Bruta para Mochila")
-            print("Resultado: ", fuerza_bruta(datos))
+            print("Resultado: ", mochila_fuerza_bruta(datos))
 
         # Caso programacion dinamica
         elif (algoritmo == 2):
             print("Ejecutando Programacion Dinamica para Mochila")
-            print("Resultado: ", programacion_dinamica(datos))
+            print("Resultado: ", mochila_programacion_dinamica(datos))
 
         # Contencion algoritmo invalido
         else:
