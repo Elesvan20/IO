@@ -86,7 +86,7 @@ def obtener_parametros():
     problema = int(sys.argv[1])
 
     #Verificamos que sea un valor permitido
-    if (0 > problema and problema > 2):
+    if (1 > problema or problema > 2):
         print("ERROR: Valor de problema invalido! Debe ser 1 o 2 \n"
               "Se recibio un "+str(problema))
         sys.exit(PROBLEMAINVALIDO)
