@@ -23,7 +23,6 @@
 
 import sys
 import random
-#from solver import mochila_fuerza_bruta
 
 #Variables globales
 problema = 0
@@ -41,18 +40,30 @@ ALGORITMOINVALIDO = -5
 ERROR_ARCHIVO = "\nERROR: Parece que el archivo indicado no existe dentro de mi carpeta de ejecucion!!\n"
 SINTAXIS_USO = "\nSintaxis: python3 generator.py PROBLEMA(1/2) ARCHIVO(nombre.txt) PARAMETROS (una sola instruccion, usar comillas)\n"
 
+#pequeña funcion, se encarga de guardar correctamente los datos en un archivo de texto
+def guardar_en_archivo(configuraciones):
+
+    archivoSalida = open(nombre_archivo, "w")
+    archivoSalida.write(configuraciones)
+    print("Guardado de datos en archivo "+nombre_archivo +" Exitoso!")
+
+
+'''
+    Funcion encargada de interpretar los argumentos en consola
+    y generar una estructura compatible con mochila tanto fuerza bruta como con P.D.
+'''
 def problema1_mochila():
 
     #verificamos que hayan suficientes parametros antes de continuar
     if (len(parametros) != 8):
-        print("Error! Se recibieron parametros incompletos para crear la configuracion de la mochila\n"
+        print("Error! Se recibieron parametros incorrectos para crear la configuracion de la mochila\n"
               "Parametros recibidos: ")
         print(parametros)
         print("Cantidad de parametros: "+str(len(parametros)))
         sys.exit(POCOSPARAMETROS)
 
     #Conversion de los parametros a formato necesario
-    peso = [int(parametros[0])]
+    peso = int(parametros[0])
     elementos = int(parametros[1])
     minPeso = int(parametros[2])
     maxPeso = int(parametros[3])
@@ -61,21 +72,14 @@ def problema1_mochila():
     minCantidad = int(parametros[6])
     maxCantidad = int(parametros[7])
 
-    configs = []
+    texto_archivo = str(peso)+"\n"
+
     for i in range(elementos):
-        nuevo_articulo = str(random.randint(minPeso, maxPeso))+" "+str(random.randint(minBeneficio, maxBeneficio))+" "+str(random.randint(minCantidad, maxCantidad))
-        nuevo_articulo = nuevo_articulo.split(" ")
-        print(nuevo_articulo)
-        configs.append(nuevo_articulo)
+        texto_archivo += str(random.randint(minPeso, maxPeso))+","+str(random.randint(minBeneficio, maxBeneficio))+","+str(random.randint(minCantidad, maxCantidad))+"\n"
 
-    configs.insert(0, peso)
     print("Configuraciones finales: ")
-    print(configs)
-
-    '''import solver as sv
-    sv.solver = False
-    print(sv.mochila_fuerza_bruta(configs))'''
-
+    print(texto_archivo)
+    guardar_en_archivo(texto_archivo)
 
 #
 #Sintaxis:
@@ -126,7 +130,7 @@ def generador_obtener_parametros():
         sys.exit(PROBLEMAINVALIDO)
 
     # Guardamos el nombre para el futuro archivo de texto
-    nombre_archivo = sys.argv[2]
+    nombre_archivo = sys.argv[2]+".txt"
 
     #Guardamos en un arreglo los datos recibidos como parametros
     parametros = sys.argv[3].split(" ")
@@ -138,7 +142,7 @@ def main():
     print("Nombre deseado para el archivo " + str(nombre_archivo))
     print("Parametros obtenidos: ", parametros)
 
-    if (problema == 1):
+    if problema == 1:
         problema1_mochila()
 
     else:
