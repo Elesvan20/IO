@@ -58,7 +58,6 @@ sintaxis_uso = "\nSintaxis: python3 solver.py [-h] PROBLEMA(1/2) ALGORITMO(1/2) 
 
 #Funcion recursiva para realizar el recorrido de mochila
 def fuerza_bruta_auxiliar(mochila,valores,pesos,elementos):
-
     #Caso cuando no hay mas espacio en la mochila o bien, se acaban los elementos
     if (elementos == 0 or mochila == 0):
         return 0
@@ -69,8 +68,13 @@ def fuerza_bruta_auxiliar(mochila,valores,pesos,elementos):
 
     #llamada recursiva sobre la lista
     else:
-        return max(valores[elementos-1] + fuerza_bruta_auxiliar(mochila-pesos[elementos-1],valores,pesos,elementos-1),
-                    fuerza_bruta_auxiliar(mochila,valores,pesos,elementos-1))
+        return max(
+                    #Caso agrego elemento a la mochila
+                    valores[elementos-1] + fuerza_bruta_auxiliar(mochila-pesos[elementos-1],valores,pesos,elementos-1),
+
+                    #Caso no agrego elemento a la mochila
+                    fuerza_bruta_auxiliar(mochila,valores,pesos,elementos-1)
+                )
 
 '''
     Funcion encargada de modelar los datos
@@ -94,11 +98,55 @@ def fuerza_bruta(datos):
     print("arreglo de beneficio: ",valores)
     print("arreglo de pesos: ", pesos)
 
-    print(fuerza_bruta_auxiliar(mochila, valores, pesos, len(valores)))
+    return fuerza_bruta_auxiliar(mochila, valores, pesos, len(valores))
 
+#Funcion auxiliar para el recorrido dinamico de la mochila
+def programacion_dinamica_auxiliar(mochila,valores,pesos,elementos):
 
-def programacion_dinamica():
-    print("progra dinamica")
+    #creamos la matriz a utilizar para el algoritmo
+    matriz = [[0 for x in range(mochila + 1)] for x in range(elementos + 1)]
+
+    #construccion de la matriz
+    for i in range(elementos + 1):
+        for j in range(mochila + 1):
+            #Caso cuando no hay mas espacio en la mochila o bien, se acaban los elementos
+            if i == 0 or j == 0:
+                matriz[i][j] = 0
+
+            #existe un elemento a ser agregado en la mochila
+            elif pesos[i-1] <= j:
+                matriz[i][j] = max(
+                                # Caso agrego elemento a la mochila
+                                valores[i - 1]+matriz[i-1][j-pesos[i-1]],
+
+                                # Caso no agrego elemento a la mochila
+                                matriz[i-1][j]
+                                )
+            #elemento no apto para mochila, avanzamos al siguiente
+            else:
+                matriz[i][j] = matriz[i-1][j]
+
+    #regresamos el acumulado de la matriz
+    return matriz[elementos][mochila]
+'''
+    Funcion encargada de modelar los datos
+    para realizar la corrida de mochila
+    siguiendo el algoritmo de programacion dinamica
+'''
+def programacion_dinamica(datos):
+    mochila = int(datos[0][0])
+    valores = []
+    pesos = []
+
+    #separar los items que nos dan
+    for i in range(1,len(datos)):
+        print(datos[i])
+        #posicion 2 es la cantidad de items
+        for j in range(int(datos[i][2])):
+            pesos.append(int(datos[i][0]))
+            valores.append(int(datos[i][1]))
+
+    return programacion_dinamica_auxiliar(mochila, valores, pesos, len(pesos))
 
 '''
 CASO MOCHILA
@@ -220,10 +268,14 @@ def main():
 
     if (problema == 1): #Caso Mochila
         print("Valor algoritmo "+str(algoritmo))
-        if (algoritmo == '1'): #Caso fuerza bruta
+
+        # Caso fuerza bruta
+        if (algoritmo == '1'):
             fuerza_bruta(datos)
-        else:                #Caso programacion dinamica
-            programacion_dinamica()
+
+        # Caso programacion dinamica
+        else:
+            programacion_dinamica(datos)
 
     else:
         print("Caso alineamiento")
