@@ -53,11 +53,15 @@ texto_ayuda = "\n========================Inicio de Mensaje de Ayuda=============
               "largoH2 es el largo de la hilera2\n" \
           "NOTA: Siempre se ejecuta el metodo de scoring +1,-1,-2; Ademas, solo se utilizaran las letras A T C G\n" \
               "========================Fin de Mensaje de Ayuda========================\n"
-
 error_archivo = "\nERROR: Parece que el archivo indicado no existe dentro de mi carpeta de ejecucion!!\n"
 error_pocos_parametros = "\nError: Hacen falta parametros!\n Utilice el parametro -h para mostrar mas informacion\n"
 error_muchos_parametros = "\nError: Se recibieron muchos parametros\n Utilice el parametro -h para mostrar mas informacion\n"
 sintaxis_uso = "\nSintaxis: python3 solver.py [-h] PROBLEMA(1/2) ALGORITMO(1/2) ARCHIVO(nombre.txt)\n"
+
+def imprimirMatriz(matriz):
+    for i in range(len(matriz)):
+        print(matriz[i])
+
 
 #Funcion recursiva para realizar el recorrido de mochila
 def fuerza_bruta_auxiliar(mochila,valores,pesos,elementos):
@@ -124,7 +128,7 @@ def programacion_dinamica_auxiliar(mochila,valores,pesos,elementos):
             #elemento no apto para mochila, avanzamos al siguiente
             else:
                 matriz[i][j] = matriz[i-1][j]
-
+    imprimirMatriz(matriz)
     #regresamos el acumulado de la matriz
     return matriz[elementos][mochila]
 '''
@@ -304,8 +308,8 @@ def main():
     print("Usando algoritmo: "+str(algoritmo))
     print("datos obtenidos: ", datos)
 
-
-    if (problema == 1): #Caso Mochila
+    # Caso Mochila
+    if (problema == 1):
 
         # Caso fuerza bruta
         if (algoritmo == 1):
