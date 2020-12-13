@@ -56,9 +56,45 @@ error_pocos_parametros = "\nError: Hacen falta parametros!\n Utilice el parametr
 error_muchos_parametros = "\nError: Se recibieron muchos parametros\n Utilice el parametro -h para mostrar mas informacion\n"
 sintaxis_uso = "\nSintaxis: python3 solver.py [-h] PROBLEMA(1/2) ALGORITMO(1/2) ARCHIVO(nombre.txt)\n"
 
+#Funcion recursiva para realizar el recorrido de mochila
+def fuerza_bruta_auxiliar(mochila,valores,pesos,elementos):
 
-def fuerza_bruta():
+    #Caso cuando no hay mas espacio en la mochila o bien, se acaban los elementos
+    if (elementos == 0 or mochila == 0):
+        return 0
+
+    #Caso donde no tenemos espacio para este elemento
+    if (pesos[elementos-1] > mochila):
+        return fuerza_bruta_auxiliar(mochila, valores, pesos, elementos-1)
+
+    #llamada recursiva sobre la lista
+    else:
+        return max(valores[elementos-1] + fuerza_bruta_auxiliar(mochila-pesos[elementos-1],valores,pesos,elementos-1),
+                    fuerza_bruta_auxiliar(mochila,valores,pesos,elementos-1))
+
+'''
+    Funcion encargada de modelar los datos
+    para realizar la corrida de mochila
+    siguiendo el algoritmo de fuerza bruta
+'''
+def fuerza_bruta(datos):
     print("Fuerza Bruta")
+    mochila = int(datos[0][0])
+    valores = []
+    pesos = []
+
+    #separar los items que nos dan
+    for i in range(1,len(datos)):
+        print(datos[i])
+        #posicion 2 es la cantidad de items
+        for j in range(int(datos[i][2])):
+            pesos.append(int(datos[i][0]))
+            valores.append(int(datos[i][1]))
+    print("Mochila ",(mochila))
+    print("arreglo de beneficio: ",valores)
+    print("arreglo de pesos: ", pesos)
+
+    print(fuerza_bruta_auxiliar(mochila, valores, pesos, len(valores)))
 
 
 def programacion_dinamica():
@@ -67,14 +103,14 @@ def programacion_dinamica():
 '''
 CASO MOCHILA
     si -h es indicado, usar:
-    PROBLEMA = sys.argv[2]
-    ALGORITMO = sys.argv[3]
-    ARCHIVO = sys.argv[4]
+    PROBLEMA = sys.argv[2]  (INT)
+    ALGORITMO = sys.argv[3] (STRING)
+    ARCHIVO = sys.argv[4]   (STRING)
 
     si -h NO es indicado, usar
-    PROBLEMA = sys.argv[1]
-    ALGORITMO = sys.argv[2]
-    ARCHIVO = sys.argv[3]
+    PROBLEMA = sys.argv[1]  (INT)
+    ALGORITMO = sys.argv[2] (STRING)
+    ARCHIVO = sys.argv[3]   (STRING)
 '''
 def obtener_datos_mochila(despliegaH):
 
@@ -181,6 +217,17 @@ def main():
     print("Usando algoritmo: "+str(algoritmo))
     print("datos obtenidos: \n")
     print(datos)
+
+    if (problema == 1): #Caso Mochila
+        print("Valor algoritmo "+str(algoritmo))
+        if (algoritmo == '1'): #Caso fuerza bruta
+            fuerza_bruta(datos)
+        else:                #Caso programacion dinamica
+            programacion_dinamica()
+
+    else:
+        print("Caso alineamiento")
+
 
 
 main()
