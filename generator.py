@@ -75,6 +75,7 @@ def problema1_mochila():
 
     texto_archivo = str(peso)+"\n"
 
+    #Se conservo en una sola linea larga para tener mayor claridad al leer el orden de los datos
     for i in range(elementos):
         texto_archivo += str(random.randint(minPeso, maxPeso))+","+str(random.randint(minBeneficio, maxBeneficio))+","+str(random.randint(minCantidad, maxCantidad))+"\n"
 
