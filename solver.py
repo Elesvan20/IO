@@ -11,6 +11,9 @@ import time
 #Variables globales
 problema = 0
 algoritmo = 0
+GAP_PENALTY = -2
+MATCH = 1
+MISSMATCH = -1
 
 #Codigos posibles errores
 POCOSPARAMETROS = -1
@@ -64,6 +67,11 @@ def imprimirMatriz(matriz):
     for i in range(len(matriz)):
         print(matriz[i])
 
+#funcion auxiliar para separar strings en caracteres
+def split(string):
+    return [char for char in string]
+
+#======================================================================================================================
 
 #Funcion recursiva para realizar el recorrido de mochila
 def mochila_fuerza_bruta_auxiliar(mochila, valores, pesos, elementos):
@@ -195,6 +203,21 @@ def obtener_datos_mochila(despliegaH):
             lineas.append(line.split(","))
         return (lineas)
 
+#======================================================================================================================
+
+'''
+    Funcion encargada de realizar el recorrido de alineamiento en fuerza bruta
+'''
+def alineamiento_fuerza_bruta(datos):
+    hilera1 = datos[1][0]
+    hilera2 = datos[2][0]
+
+    #partir las hileras
+    hilera1 = split(hilera1)
+    hilera2 = split(hilera2)
+    matriz = [ [ 0 for i in range(1) ] for j in range(1) ]
+
+    return "WIP"
 '''
     Funcion encarga de obtener los datos del archivo de texto
     y retornarlos en un arreglo para su posterior uso
@@ -233,6 +256,8 @@ def obtener_datos_alineamiento(despliegaH):
             lineas.append(line.split(","))
         return (lineas)
 
+
+#======================================================================================================================
 '''
     Define la logica para
     obtener los parametros del archivo indicado    
@@ -329,7 +354,11 @@ def main():
             sys.exit(ALGORITMOINVALIDO)
 
     elif (problema == 2):
-        print("Caso alineamiento")
+        if (algoritmo == 1):
+            print("Caso alineamiento fuerza bruta")
+            print("Resultado: \n"+alineamiento_fuerza_bruta(datos))
+        else:
+            print("Caso alineamiento Progra dinamica")
 
     else:
         print("Error: No se ha seleccionado un problema valido a ejecutar (1-2)\n"
@@ -337,16 +366,7 @@ def main():
         sys.exit(PROBLEMAINVALIDO)
 
 
-
-
 #cronometro para calcular la ejecucion del proyecto
 tiempo_inicio = time.time()
 main()
 print("¡Programa Finalizado!\nSegundos transcurridos", (time.time() - tiempo_inicio))
-
-'''
-    Sintaxis
-    python3 solver.py [-h] PROBLEMA ALGORITMO ARCHIVO
-    
-    python3 generator.py PROBLEMA ARCHIVO PARAMETROS
-'''
