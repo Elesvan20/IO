@@ -305,9 +305,9 @@ def obtener_parametros():
 def main():
     global problema, algoritmo
     datos = obtener_parametros()
-    print("Ejecutando problema "+str(problema))
-    print("Usando algoritmo: "+str(algoritmo))
-    print("datos obtenidos: ", datos)
+    #print("Ejecutando problema "+str(problema))
+    #print("Usando algoritmo: "+str(algoritmo))
+    #print("datos obtenidos: ", datos)
 
     # Caso Mochila
     if (problema == 1):
