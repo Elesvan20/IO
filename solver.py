@@ -342,7 +342,7 @@ def main():
 #cronometro para calcular la ejecucion del proyecto
 tiempo_inicio = time.time()
 main()
-print("¡Programa Finalizado!\nSegundos transcurridos",(time.time() - tiempo_inicio))
+print("¡Programa Finalizado!\nSegundos transcurridos", (time.time() - tiempo_inicio))
 
 '''
     Sintaxis
