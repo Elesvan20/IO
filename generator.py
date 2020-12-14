@@ -32,6 +32,7 @@ nombre_archivo = ""
 #Codigos posibles errores
 POCOSPARAMETROS = -1
 MUCHOSPARAMETROS = -2
+ERRORPARAMETROS = -6
 ARCHIVONOENCONTRADO = -3
 PROBLEMAINVALIDO = -4
 ALGORITMOINVALIDO = -5
@@ -96,9 +97,44 @@ def problema1_mochila():
 #    Hilera1: ATTGTGATC__C
 #    Hilera2: _TTG_CATCGGC
 
-
+'''
+    Función encargada de producir hileras aleatorias
+    y guardaras en el archivo de salida especificado
+    compuesto solo de letras A T C G
+    Las letras estan representadas por numeros aleatorios entre 0 y 3 respectivamente
+    siendo estos los indices de un arreglo
+'''
 def problema2_alineamiento():
-    print("Resuelvo el problema de alineamiento de secuencias")
+
+    #verificacion de parametros correctos
+    if (len(parametros) != 2):
+        print("Error: Ha ingresado una cantidad distinta a 2 hileras para procesar!")
+        print("Cantidad de Hileras ingresadas: "+str(len(parametros)))
+        sys.exit(ERRORPARAMETROS)
+
+    largoH1 = int(parametros[0])
+    largoH2 = int(parametros[1])
+    hilera1 = ""
+    hilera2 = ""
+    letras = ["A","T","C","G"]
+    formato = "1,-1,-2\n"
+
+    #Se requieren dos ciclos debido a que puede haber discrepancia de longitudes para cada hilera
+    for i in range(largoH1):
+        # asigna la letra aleatoria a la hilera1
+        numeroLetra = random.randint(0,3)
+        hilera1 += str(letras[numeroLetra])
+
+    for i in range(largoH2):
+        # asigna la letra aleatoria a la hilera2
+        numeroLetra = random.randint(0, 3)
+        hilera2 += str(letras[numeroLetra])
+
+    #Conformamos el string de salida
+    formato +=hilera1+"\n"+hilera2
+
+    #guardamos el string en un archivo de salida
+    guardar_en_archivo(formato)
 
 ########################################################################################################################
 '''
