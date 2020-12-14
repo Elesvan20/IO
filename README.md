@@ -4,5 +4,5 @@ Contenidos desarrollados
 * Implementación de alineación de Hileras
 * Implementación de un generator, capaz de crear ejercicios automáticamente a partir de parámetros otorgados
 
-En el siguiente enlace, se visualiza el crudo 
+En el siguiente enlace, se visualiza el crudo del reporte final
 * https://www.overleaf.com/read/rfdybypyyzfz
