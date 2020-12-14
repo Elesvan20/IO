@@ -130,7 +130,7 @@ def mochila_programacion_dinamica_auxiliar(mochila, valores, pesos, elementos):
             #elemento no apto para mochila, avanzamos al siguiente
             else:
                 matriz[i][j] = matriz[i-1][j]
-    imprimirMatriz(matriz)
+    #imprimirMatriz(matriz)
     #regresamos el acumulado de la matriz
     return matriz[elementos][mochila]
 '''
