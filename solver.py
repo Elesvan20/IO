@@ -285,8 +285,8 @@ def alineamiento_fuerza_bruta(datos):
     hilera1 += ("*"*abs(diferencia - lenh1))
     hilera2 += ("*" * abs(diferencia - lenh2))
     print("Listas ingresadas: ")
-    print(hilera1)
-    print(hilera2)
+    print(datos[1][0])
+    print(datos[2][0])
 
     #Se agrega manejo de excepcion ya que se sabe, que el algoritmo es lento en casos muy grandes
     try:
@@ -357,11 +357,23 @@ def calcular_matriz(matriz, hilera1, hilera2):
             puntaje = 0
     return matriz
 
+'''
+    Esta funcion se encarga de realizar un recorrido de reversa por la matriz de penalizacion
+    obteniendo una secuencia para la ruta mas optima
+'''
+def obtener_puntaje_matriz(matriz, hilera1, hilera2):
+    print("WIP")
+
+
+
 def alineamiento_programacion_dinamica(datos):
     # se ponen en mayusculas para evitar incongruencias a la hora de comparar caracteres
     hilera1 = "*"+datos[1][0].upper()
     hilera2 = "*"+datos[2][0].upper()
 
+    print("Listas ingresadas:")
+    print(datos[1][0])
+    print(datos[2][0])
     #se suma 1 por que asumimos el primer espacio vacío
     lenh1 = len(hilera1)
     lenh2 = len(hilera2)
@@ -372,10 +384,10 @@ def alineamiento_programacion_dinamica(datos):
     #recorremos la matriz agregando los valores necesarios
     matriz = calcular_matriz(matriz, hilera1, hilera2)
 
-    print(hilera1)
-    print(hilera2)
-    print("matriz ")
-    print(imprimirMatriz(matriz))
+    #mejor_puntaje = obtener_puntaje_matriz(matriz, hilera1, hilera2)
+    #imprimirMatriz(matriz)
+
+    return matriz[lenh1-1][lenh2-1]
 
 
 
@@ -523,10 +535,10 @@ def main():
             print(mejor_hilera2)
         else:
             print("Caso alineamiento programacion dinamica")
-            print("Resultado: \n" + str(alineamiento_programacion_dinamica(datos)))
-            print("Hileras:")
-            print(mejor_hilera1)
-            print(mejor_hilera2)
+            print("Scoring Obtenido: \n" + str(alineamiento_programacion_dinamica(datos)))
+            #print("Hileras:")
+            #print(mejor_hilera1)
+            #print(mejor_hilera2)
 
     else:
         print("Error: No se ha seleccionado un problema valido a ejecutar (1-2)\n"
