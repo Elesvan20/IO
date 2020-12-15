@@ -14,6 +14,9 @@ algoritmo = 0
 GAP_PENALTY = -2
 MATCH = 1
 MISSMATCH = -1
+mejor_hilera1 = ""
+mejor_hilera2 = ""
+tiempo_inicio = 0
 
 #Codigos posibles errores
 POCOSPARAMETROS = -1
@@ -21,6 +24,7 @@ MUCHOSPARAMETROS = -2
 ARCHIVONOENCONTRADO = -3
 PROBLEMAINVALIDO = -4
 ALGORITMOINVALIDO = -5
+ERRORMEMORIA = -6
 
 #Strings constantes
 texto_ayuda = "\n========================Inicio de Mensaje de Ayuda========================\n" \
@@ -204,20 +208,106 @@ def obtener_datos_mochila(despliegaH):
         return (lineas)
 
 #======================================================================================================================
+#funcion auxiliar para devolver una lista de permutaciones sin repeticiones, dado un string
+def permutaciones(lista):
+    permas = [[]]
+    for i in lista:
+        nueva_perma = []
+        for perma in permas:
+            for j in range(len(perma) + 1):
+                nueva_perma.append(perma[:j] + [i] + perma[j:])
+                # evita la duplicacion
+                if j < len(perma) and perma[j] == i: break
+        permas = nueva_perma
+    return permas
+
+
+#Funcion auxiliar que calcular el puntaje de dos strings siguiendo el scoring y lo retorna
+def calcular_puntaje(subhilera1, subhilera2):
+
+    puntaje = 0
+    for i in range(len(subhilera1)):
+
+        if subhilera1[i] == "*" or subhilera2[i] == "*":
+            puntaje += GAP_PENALTY
+        elif subhilera1[i] == subhilera2[i]:
+            puntaje += MATCH
+        else:
+            print("MISSMATCH -1")
+
+    return puntaje
+
+'''
+    Funcion encargada de cruzar todas las posibles combinaciones
+    entre ambas listas, recordando cual es el mejor puntaje y devolviendolo
+    como valor de retorno
+'''
+def cruzar_listas(listas1, listas2):
+    global mejor_hilera1, mejor_hilera2
+
+    #ponemos un negativo grande para que sea sobreescrito siempre
+    mayor_puntaje = -10000
+
+    #ciclo para recorrer ambas listas
+    for i in range(len(listas1)):
+        for j in range(len(listas2)):
+
+            puntaje_calculado = calcular_puntaje(listas1[i], listas2[j])
+
+            #mantendremos este print ya que sirve bastante para visualizar los datos de la corrida
+            #print("Puntaje obtenido de la corrida "+listas1[i] + " "+listas2[j] + " es: "+str(puntaje_calculado))
+
+            #caso especial de la primera asignacion
+            if (mayor_puntaje == -10000):
+                mayor_puntaje = puntaje_calculado
+                mejor_hilera1 = str(listas1[i])
+                mejor_hilera2 = str(listas2[j])
+
+            #verificamos si tenemos nuevo mejor match
+            elif (puntaje_calculado > mayor_puntaje):
+                mejor_hilera1 = str(listas1[i])
+                mejor_hilera2 = str(listas2[j])
+                mayor_puntaje = puntaje_calculado
+
+    return mayor_puntaje
 
 '''
     Funcion encargada de realizar el recorrido de alineamiento en fuerza bruta
 '''
 def alineamiento_fuerza_bruta(datos):
-    hilera1 = datos[1][0]
-    hilera2 = datos[2][0]
+    global tiempo_inicio
 
-    #partir las hileras
-    hilera1 = split(hilera1)
-    hilera2 = split(hilera2)
-    matriz = [ [ 0 for i in range(1) ] for j in range(1) ]
+    #se ponen en mayusculas para evitar incongruencias a la hora de comparar caracteres
+    hilera1 = datos[1][0].upper()
+    hilera2 = datos[2][0].upper()
 
-    return "WIP"
+    lenh1 = len(hilera1)
+    lenh2 = len(hilera2)
+    diferencia = lenh1 + lenh2
+
+    hilera1 += ("*"*abs(diferencia - lenh1))
+    hilera2 += ("*" * abs(diferencia - lenh2))
+    print("Listas ingresadas: ")
+    print(hilera1)
+    print(hilera2)
+
+    #Se agrega manejo de excepcion ya que se sabe, que el algoritmo es lento en casos muy grandes
+    try:
+        lista_permutaciones_hilera1 = (list(map(lambda x: "".join(x), permutaciones(hilera1))))[-diferencia:]
+        lista_permutaciones_hilera2 = (list(map(lambda x: "".join(x), permutaciones(hilera2))))[-diferencia:]
+    except MemoryError as error:
+        print("Las hileras son demasiado grandes y ya me quedé sin memoria!!")
+        print("MEMORY ERROR")
+        print("¡Programa Finalizado!\nSegundos transcurridos", (time.time() - tiempo_inicio))
+        sys.exit(ERRORMEMORIA)
+
+    print("Listas permutadas obtenidas:")
+    print(lista_permutaciones_hilera1)
+    print(lista_permutaciones_hilera2)
+
+    mejor_puntaje = cruzar_listas(lista_permutaciones_hilera1, lista_permutaciones_hilera2)
+    return(mejor_puntaje)
+
 '''
     Funcion encarga de obtener los datos del archivo de texto
     y retornarlos en un arreglo para su posterior uso
@@ -328,7 +418,7 @@ def obtener_parametros():
 
 
 def main():
-    global problema, algoritmo
+    global problema, algoritmo, mejor_hilera1, mejor_hilera2
     datos = obtener_parametros()
     #print("Ejecutando problema "+str(problema))
     #print("Usando algoritmo: "+str(algoritmo))
@@ -356,7 +446,10 @@ def main():
     elif (problema == 2):
         if (algoritmo == 1):
             print("Caso alineamiento fuerza bruta")
-            print("Resultado: \n"+alineamiento_fuerza_bruta(datos))
+            print("Resultado: \n"+str(alineamiento_fuerza_bruta(datos)))
+            print("Hileras:")
+            print(mejor_hilera1)
+            print(mejor_hilera2)
         else:
             print("Caso alineamiento Progra dinamica")
 
