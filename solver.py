@@ -308,6 +308,7 @@ def alineamiento_fuerza_bruta(datos):
 #funcion auxiliar para crear la matriz inicial de alineamiento programacion dinamica
 def crearMatrizAlineamiento(hilera1, hilera2):
     matriz = []
+
     columnas = []
     acumulador_columna = 0
     acumulador_fila = 0
@@ -331,17 +332,15 @@ def crearMatrizAlineamiento(hilera1, hilera2):
     Funcion importante, encargada de recibir la matriz con las penalizaciones iniciales
     para agregar los calculos segun las penalizaciones calculadas
 '''
-def calcular_matriz(matriz):
+def calcular_matriz(matriz, hilera1, hilera2):
     puntaje = 0
-    print("Filas "+str( len(matriz)))
-    print("Columnas " + str( len(matriz[0])))
 
     for i in range(1, len(matriz)):
         for j in range(1, len(matriz[0])):
 
-            #elementos para no estar consultando tanto la matriz
-            elemento_de_fila = matriz[0][j]
-            elemento_de_columna = matriz[i][0]
+            #elementos para no estar consultando tanto las hileras
+            elemento_de_fila = hilera1[i]
+            elemento_de_columna = hilera2[j]
 
             if elemento_de_fila == "*" or elemento_de_columna == "*":
                 puntaje = GAP_PENALTY
@@ -349,7 +348,7 @@ def calcular_matriz(matriz):
                 puntaje = MATCH
             else:
                 puntaje = MISSMATCH
-            print("Comparando "+str(elemento_de_fila) + " con "+str(elemento_de_columna) + " Se obtuvo "+ str(puntaje))
+            #print("Comparando "+str(elemento_de_fila) + " con "+str(elemento_de_columna) + " Se obtuvo puntaje "+ str(puntaje))
             matriz[i][j] = max(
                             matriz[i-1][j-1] + puntaje,
                             matriz[i-1][j] + GAP_PENALTY,
@@ -371,7 +370,7 @@ def alineamiento_programacion_dinamica(datos):
     matriz = crearMatrizAlineamiento(hilera1, hilera2)
 
     #recorremos la matriz agregando los valores necesarios
-    matriz = calcular_matriz(matriz)
+    matriz = calcular_matriz(matriz, hilera1, hilera2)
 
     print(hilera1)
     print(hilera2)
