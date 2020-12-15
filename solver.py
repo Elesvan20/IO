@@ -71,10 +71,6 @@ def imprimirMatriz(matriz):
     for i in range(len(matriz)):
         print(matriz[i])
 
-#funcion auxiliar para separar strings en caracteres
-def split(string):
-    return [char for char in string]
-
 #======================================================================================================================
 
 #Funcion recursiva para realizar el recorrido de mochila
@@ -233,7 +229,7 @@ def calcular_puntaje(subhilera1, subhilera2):
         elif subhilera1[i] == subhilera2[i]:
             puntaje += MATCH
         else:
-            print("MISSMATCH -1")
+            puntaje += MISSMATCH
 
     return puntaje
 
@@ -307,6 +303,12 @@ def alineamiento_fuerza_bruta(datos):
 
     mejor_puntaje = cruzar_listas(lista_permutaciones_hilera1, lista_permutaciones_hilera2)
     return(mejor_puntaje)
+
+def alineamiento_programacion_dinamica(datos):
+
+    print("procesar pd")
+
+
 
 '''
     Funcion encarga de obtener los datos del archivo de texto
@@ -451,7 +453,11 @@ def main():
             print(mejor_hilera1)
             print(mejor_hilera2)
         else:
-            print("Caso alineamiento Progra dinamica")
+            print("Caso alineamiento programacion dinamica")
+            print("Resultado: \n" + str(alineamiento_programacion_dinamica(datos)))
+            print("Hileras:")
+            print(mejor_hilera1)
+            print(mejor_hilera2)
 
     else:
         print("Error: No se ha seleccionado un problema valido a ejecutar (1-2)\n"
