@@ -385,7 +385,7 @@ def alineamiento_programacion_dinamica(datos):
     matriz = calcular_matriz(matriz, hilera1, hilera2)
 
     #mejor_puntaje = obtener_puntaje_matriz(matriz, hilera1, hilera2)
-    #imprimirMatriz(matriz)
+    imprimirMatriz(matriz)
 
     return matriz[lenh1-1][lenh2-1]
 
