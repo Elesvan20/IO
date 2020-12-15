@@ -70,6 +70,7 @@ SINTAXIS_USO = "\nSintaxis: python3 solver.py [-h] PROBLEMA(1/2) ALGORITMO(1/2) 
 def imprimirMatriz(matriz):
     for i in range(len(matriz)):
         print(matriz[i])
+        print("\t")
 
 #======================================================================================================================
 
@@ -304,9 +305,78 @@ def alineamiento_fuerza_bruta(datos):
     mejor_puntaje = cruzar_listas(lista_permutaciones_hilera1, lista_permutaciones_hilera2)
     return(mejor_puntaje)
 
-def alineamiento_programacion_dinamica(datos):
+#funcion auxiliar para crear la matriz inicial de alineamiento programacion dinamica
+def crearMatrizAlineamiento(hilera1, hilera2):
+    matriz = []
+    columnas = []
+    acumulador_columna = 0
+    acumulador_fila = 0
 
-    print("procesar pd")
+    for i in range(len(hilera1)):
+        if i != 0:
+            acumulador_columna = acumulador_fila
+        for j in range(len(hilera2)):
+            if i == 0 or j == 0:
+                columnas.append(acumulador_columna)
+                acumulador_columna += GAP_PENALTY
+            else:
+                columnas.append(0)
+        matriz.append(columnas.copy())
+        acumulador_fila += GAP_PENALTY
+        columnas = []
+
+    return matriz
+
+'''
+    Funcion importante, encargada de recibir la matriz con las penalizaciones iniciales
+    para agregar los calculos segun las penalizaciones calculadas
+'''
+def calcular_matriz(matriz):
+    puntaje = 0
+    print("Filas "+str( len(matriz)))
+    print("Columnas " + str( len(matriz[0])))
+
+    for i in range(1, len(matriz)):
+        for j in range(1, len(matriz[0])):
+
+            #elementos para no estar consultando tanto la matriz
+            elemento_de_fila = matriz[0][j]
+            elemento_de_columna = matriz[i][0]
+
+            if elemento_de_fila == "*" or elemento_de_columna == "*":
+                puntaje = GAP_PENALTY
+            elif elemento_de_fila == elemento_de_columna:
+                puntaje = MATCH
+            else:
+                puntaje = MISSMATCH
+            print("Comparando "+str(elemento_de_fila) + " con "+str(elemento_de_columna) + " Se obtuvo "+ str(puntaje))
+            matriz[i][j] = max(
+                            matriz[i-1][j-1] + puntaje,
+                            matriz[i-1][j] + GAP_PENALTY,
+                            matriz[i][j-1] + GAP_PENALTY
+                            )
+            puntaje = 0
+    return matriz
+
+def alineamiento_programacion_dinamica(datos):
+    # se ponen en mayusculas para evitar incongruencias a la hora de comparar caracteres
+    hilera1 = "*"+datos[1][0].upper()
+    hilera2 = "*"+datos[2][0].upper()
+
+    #se suma 1 por que asumimos el primer espacio vacío
+    lenh1 = len(hilera1)
+    lenh2 = len(hilera2)
+
+    #creamos la matriz solo con la fila y columna en penalizacion de gap
+    matriz = crearMatrizAlineamiento(hilera1, hilera2)
+
+    #recorremos la matriz agregando los valores necesarios
+    matriz = calcular_matriz(matriz)
+
+    print(hilera1)
+    print(hilera2)
+    print("matriz ")
+    print(imprimirMatriz(matriz))
 
 
 
